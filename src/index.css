@@ -1,0 +1,159 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background: #98C0FF;
+}
+
+.chat__root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  min-height: 100vh;
+  
+}
+
+.chat__window {
+  width: 344px;
+  height: 640px;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat__header {
+  background: #323232;
+  color: #fff;
+  padding: 30px 20px 30px;
+}
+
+.chat__header-left {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.chat__avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.chat__name {
+  font-weight: 500;
+  font-size: 18px;
+  color: #fff;
+}
+
+.chat__status {
+  font-weight: 300;
+  font-size: 14px;
+  color: #fff;
+}
+
+.chat__body {
+  height: 632px;
+  padding: 18px 14px;
+  background-repeat: repeat;
+  overflow-y: auto;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 302px;
+  text-align: start;
+}
+
+.message.them {
+  align-self: flex-start;
+}
+
+.message.me {
+  align-self: flex-end;
+  align-items: flex-end;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 262px;
+}
+
+.bubble {
+  padding: 10px 12px;
+  border-radius: 16px 16px 16px 0;
+  font-size: 14px;
+  background: #C4BFFF;
+  color: #000000;
+}
+
+.message.me .bubble {
+  background: #D0DCFF;
+  color: #000000;
+  border-radius: 16px 16px 0;
+}
+
+.time {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #8b95a1;
+}
+
+.chat__input {
+  padding: 20px 22px;
+  background: #323232;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.input-field {
+  color: #fff;
+  background: #323232;
+  border: none;
+  outline: none;
+  width: 152px;
+}
+
+.input-field::placeholder {
+  color: #FFFFFF
+}
+
+/* attach button in input */
+.attach-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: #ffffff22;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.message-image {
+  max-width: 220px;
+  border-radius: 12px;
+  display: block;
+}
