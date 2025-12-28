@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Chat from './components/Chat'
 import chatMan from './assets/img/man.png'
 import chatMan2 from './assets/img/man2.png'
@@ -25,26 +25,17 @@ const App = () => {
   const [fileElA, setFileElA] = useState(null)
   const [fileElE, setFileElE] = useState(null)
 
-  const handleListRefA = (el) => {
+  const handleListRef = (el, which) => {
     if (!el) return
-    if (el !== listElA) setListElA(el)
+    if (which === 'A') setListElA(el)
+    else setListElE(el)
     el.scrollTop = el.scrollHeight
   }
 
-  const handleListRefE = (el) => {
+  const handleFileRef = (el, which) => {
     if (!el) return
-    if (el !== listElE) setListElE(el)
-    el.scrollTop = el.scrollHeight
-  }
-
-  const handleFileRefA = (el) => {
-    if (!el) return
-    if (el !== fileElA) setFileElA(el)
-  }
-
-  const handleFileRefE = (el) => {
-    if (!el) return
-    if (el !== fileElE) setFileElE(el)
+    if (which === 'A') setFileElA(el)
+    else setFileElE(el)
   }
 
   const makeTime = () => {
@@ -90,24 +81,27 @@ const App = () => {
     }
   }
 
-  const onPhotoClickA = () => { if (fileElA) fileElA.click() }
-  const onPhotoClickE = () => { if (fileElE) fileElE.click() }
+  const onPhotoClick = (which) => {
+    const ref = which === 'A' ? fileElA : fileElE
+    if (ref) ref.click()
+  }
 
-  const onFileChangeA = (e) => {
+  const onFileChange = (e, which) => {
     const file = e.target.files && e.target.files[0]
     if (!file) return
     const url = URL.createObjectURL(file)
-    sendA('', url)
+    if (which === 'A') sendA('', url)
+    else sendE('', url)
     e.target.value = null
   }
 
-  const onFileChangeE = (e) => {
-    const file = e.target.files && e.target.files[0]
-    if (!file) return
-    const url = URL.createObjectURL(file)
-    sendE('', url)
-    e.target.value = null
-  }
+  useEffect(() => {
+    if (listElA) listElA.scrollTop = listElA.scrollHeight
+  }, [messagesA, listElA])
+
+  useEffect(() => {
+    if (listElE) listElE.scrollTop = listElE.scrollHeight
+  }, [messagesE, listElE])
 
   return (
     <div style={{ display: 'flex', gap: 16, padding: 16, minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
@@ -119,10 +113,10 @@ const App = () => {
             value={valueA}
             setValue={setValueA}
             onKeyDown={onKeyDownA}
-            onPhotoClick={onPhotoClickA}
-            fileRef={handleFileRefA}
-            onFileChange={onFileChangeA}
-            listRef={handleListRefA}
+            onPhotoClick={() => onPhotoClick('A')}
+            fileRef={(el) => handleFileRef(el, 'A')}
+            onFileChange={(e) => onFileChange(e, 'A')}
+            listRef={(el) => handleListRef(el, 'A')}
           />
         </div>
       <div style={{ width: 400 }}>
@@ -133,10 +127,10 @@ const App = () => {
           value={valueE}
           setValue={setValueE}
           onKeyDown={onKeyDownE}
-          onPhotoClick={onPhotoClickE}
-          fileRef={handleFileRefE}
-          onFileChange={onFileChangeE}
-          listRef={handleListRefE}
+          onPhotoClick={() => onPhotoClick('E')}
+          fileRef={(el) => handleFileRef(el, 'E')}
+          onFileChange={(e) => onFileChange(e, 'E')}
+          listRef={(el) => handleListRef(el, 'E')}
         />
       </div>
     </div>
