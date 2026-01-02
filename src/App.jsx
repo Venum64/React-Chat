@@ -3,19 +3,19 @@ import Chat from './components/Chat'
 import chatMan from './assets/img/man.png'
 import chatMan2 from './assets/img/man2.png'
 
-const initialA = [
+const chatA = [
   { id: 1, text: 'Привет. Как дела? Где ты изучаешь программирование?', fromMe: false, time: '12:21' },
   { id: 2, text: 'Привет. Нормально. Как у тебя дела? Я учусь в учебном центре PROWEB', fromMe: true, time: '12:41' },
 ]
 
-const initialE = [
+const chatE = [
   { id: 1, text: 'Привет. Как дела? Где ты изучаешь программирование?', fromMe: true, time: '12:21' },
   { id: 2, text: 'Привет. Нормально. Как у тебя дела? Я учусь в учебном центре PROWEB', fromMe: false, time: '12:41' },
 ]
 
 const App = () => {
-  const [messagesA, setMessagesA] = useState(initialA)
-  const [messagesE, setMessagesE] = useState(initialE)
+  const [messagesA, setMessagesA] = useState(chatA)
+  const [messagesE, setMessagesE] = useState(chatE)
 
   const [valueA, setValueA] = useState('')
   const [valueE, setValueE] = useState('')
