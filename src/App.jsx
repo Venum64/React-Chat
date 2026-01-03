@@ -13,128 +13,143 @@ const chatE = [
   { id: 2, text: 'Привет. Нормально. Как у тебя дела? Я учусь в учебном центре PROWEB', fromMe: false, time: '12:41' },
 ]
 
+const users = [
+  { id: 'A', name: 'Александр', avatarImport: chatMan },
+  { id: 'E', name: 'Евгений', avatarImport: chatMan2 },
+]
+
 const App = () => {
-  const [messagesA, setMessagesA] = useState(chatA)
-  const [messagesE, setMessagesE] = useState(chatE)
+  const [messagesById, setMessagesById] = useState({ A: chatA, E: chatE })
 
-  const [valueA, setValueA] = useState('')
-  const [valueE, setValueE] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalWhich, setModalWhich] = useState(null)
+  const [modalUrl, setModalUrl] = useState('')
+  const [modalComment, setModalComment] = useState('')
 
-  const [listElA, setListElA] = useState(null)
-  const [listElE, setListElE] = useState(null)
-  const [fileElA, setFileElA] = useState(null)
-  const [fileElE, setFileElE] = useState(null)
+  const [values, setValues] = useState({ A: '', E: '' })
+
+  const [listEls, setListEls] = useState({})
+  const [fileEls, setFileEls] = useState({})
 
   const handleListRef = (el, which) => {
     if (!el) return
-    if (which === 'A') setListElA(el)
-    else setListElE(el)
+    setListEls(prev => {
+      if (prev[which] === el) return prev
+      return { ...prev, [which]: el }
+    })
     el.scrollTop = el.scrollHeight
   }
 
   const handleFileRef = (el, which) => {
     if (!el) return
-    if (which === 'A') setFileElA(el)
-    else setFileElE(el)
+    setFileEls(prev => {
+      if (prev[which] === el) return prev
+      return { ...prev, [which]: el }
+    })
   }
 
-  const makeTime = () => {
-    const time = new Date()
-    const hh = String(time.getHours()).padStart(2, '0')
-    const mm = String(time.getMinutes()).padStart(2, '0')
-    return `${hh}:${mm}`
+  const toLocaleGetDatestring = () => {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
-  const sendA = (text, image) => {
+  const send = (userId, text, image) => {
     if (!text && !image) return
-    const t = makeTime()
+    const t = toLocaleGetDatestring()
     const id = Date.now()
-    const msgA = { id, text: text || '', image: image || null, fromMe: true, time: t }
-    const msgE = { id: id + 1, text: text || '', image: image || null, fromMe: false, time: t }
-    setMessagesA(prev => [...prev, msgA])
-    setMessagesE(prev => [...prev, msgE])
+    const other = userId === 'A' ? 'E' : 'A'
+    const msgSender = { id, text: text || '', image: image || null, fromMe: true, time: t }
+    const msgOther = { id: id + 1, text: text || '', image: image || null, fromMe: false, time: t }
+    setMessagesById(prev => ({
+      ...prev,
+      [userId]: [...(prev[userId] || []), msgSender],
+      [other]: [...(prev[other] || []), msgOther]
+    }))
   }
 
-  const sendE = (text, image) => {
-    if (!text && !image) return
-    const t = makeTime()
-    const id = Date.now()
-    const msgE = { id, text: text || '', image: image || null, fromMe: true, time: t }
-    const msgA = { id: id + 1, text: text || '', image: image || null, fromMe: false, time: t }
-    setMessagesE(prev => [...prev, msgE])
-    setMessagesA(prev => [...prev, msgA])
-  }
-
-  const onKeyDownA = (e) => {
+  const onKeyDown = (which, e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      sendA(valueA)
-      setValueA('')
-    }
-  }
-
-  const onKeyDownE = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      sendE(valueE)
-      setValueE('')
+      send(which, values[which])
+      setValues(prev => ({ ...prev, [which]: '' }))
     }
   }
 
   const onPhotoClick = (which) => {
-    const ref = which === 'A' ? fileElA : fileElE
-    if (ref) ref.click()
+    setModalWhich(which)
+    setModalUrl('')
+    setModalComment('')
+    setModalVisible(true)
   }
 
   const onFileChange = (e, which) => {
     const file = e.target.files && e.target.files[0]
     if (!file) return
     const url = URL.createObjectURL(file)
-    if (which === 'A') sendA('', url)
-    else sendE('', url)
+    send(which, '', url)
     e.target.value = null
   }
 
-  useEffect(() => {
-    if (listElA) listElA.scrollTop = listElA.scrollHeight
-  }, [messagesA, listElA])
+  const closeModal = () => {
+    setModalVisible(false)
+    setModalWhich(null)
+    setModalUrl('')
+    setModalComment('')
+  }
 
+  const sendFromModal = () => {
+    if (!modalUrl) return
+    if (modalWhich) send(modalWhich, modalComment, modalUrl)
+    closeModal()
+  }
   useEffect(() => {
-    if (listElE) listElE.scrollTop = listElE.scrollHeight
-  }, [messagesE, listElE])
+    Object.keys(listEls).forEach(k => {
+      const el = listEls[k]
+      const msgs = messagesById[k] || []
+      if (el && msgs) el.scrollTop = el.scrollHeight
+    })
+  }, [messagesById, listEls])
 
   return (
     <div style={{ display: 'flex', gap: 16, padding: 16, minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ width: 400 }}>
+      {users.map(user => (
+        <div key={user.id} style={{ width: 400 }}>
           <Chat
-            name="Александр"
-            avatar={chatMan}
-            messages={messagesA}
-            value={valueA}
-            setValue={setValueA}
-            onKeyDown={onKeyDownA}
-            onPhotoClick={() => onPhotoClick('A')}
-            fileRef={(el) => handleFileRef(el, 'A')}
-            onFileChange={(e) => onFileChange(e, 'A')}
-            listRef={(el) => handleListRef(el, 'A')}
+            name={user.name}
+            avatar={user.avatarImport}
+            messages={messagesById[user.id]}
+            value={values[user.id]}
+            setValue={(v) => setValues(prev => ({ ...prev, [user.id]: v }))}
+            onKeyDown={(e) => onKeyDown(user.id, e)}
+            onPhotoClick={() => onPhotoClick(user.id)}
+            fileRef={(el) => handleFileRef(el, user.id)}
+            onFileChange={(e) => onFileChange(e, user.id)}
+            listRef={(el) => handleListRef(el, user.id)}
           />
         </div>
-      <div style={{ width: 400 }}>
-        <Chat
-          name="Евгений"
-          avatar={chatMan2}
-          messages={messagesE}
-          value={valueE}
-          setValue={setValueE}
-          onKeyDown={onKeyDownE}
-          onPhotoClick={() => onPhotoClick('E')}
-          fileRef={(el) => handleFileRef(el, 'E')}
-          onFileChange={(e) => onFileChange(e, 'E')}
-          listRef={(el) => handleListRef(el, 'E')}
-        />
-      </div>
+      ))}
+
+      {modalVisible && (
+        <div className="modal_block">
+          <div className="modal_box">
+            <h3 className="modal_box-title">Отправить картинку</h3>
+            <div className="modal_box-open">
+              <div className="modal_box-text">URL</div>
+              <input className="modal_box-input" value={modalUrl} onChange={e => setModalUrl(e.target.value)} placeholder="URL" />
+            </div>
+            <div className="modal_box-open">
+              <div className="modal_box-text">Комментарий</div>
+              <input className="modal_box-input" value={modalComment} onChange={e => setModalComment(e.target.value)} placeholder="Комментарий" />
+            </div>
+            <div className="modal_actions">
+              <button className="modal_btn modal_btn-cancel" onClick={closeModal}>ОТМЕНА</button>
+              <button className="modal_btn modal_btn-send" onClick={sendFromModal}>ОТПРАВИТЬ</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
+
 
 export default App

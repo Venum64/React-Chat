@@ -38,6 +38,7 @@ const Chat = ({
                                         {m.image ? (
                                             <div className="bubble">
                                                 <img src={m.image} alt="attached" className="message-image" />
+                                                {m.text && <div className="image-comment">{m.text}</div>}
                                             </div>
                                         ) : (
                                             <div className="bubble">{m.text}</div>
@@ -49,6 +50,7 @@ const Chat = ({
                                         {m.image ? (
                                             <div className="bubble">
                                                 <img src={m.image} alt="attached" className="message-image" />
+                                                {m.text && <div className="image-comment">{m.text}</div>}
                                             </div>
                                         ) : (
                                             <div className="bubble">{m.text}</div>

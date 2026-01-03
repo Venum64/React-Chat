@@ -17,7 +17,7 @@ body {
   align-items: center;
   margin: 0 auto;
   min-height: 100vh;
-  
+
 }
 
 .chat__window {
@@ -156,4 +156,101 @@ body {
   max-width: 220px;
   border-radius: 12px;
   display: block;
+}
+
+/* modal styles */
+.modal_block {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #00000059;
+}
+
+.modal_box {
+  width: 312px;
+  height: 288px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal_box-title {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 32px;
+  color: #1C1B1F;
+}
+
+.modal_box-open {
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 16px 8px;
+  gap: 5px;
+  background: #E7E0EC;
+  border-bottom: #000000 2px solid;
+}
+
+.modal_box-text {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #000000;
+}
+
+.modal_box-input {
+  border: none;
+  outline: none;
+  background: #E7E0EC;
+
+}
+
+.modal_box-input::placeholder {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #49454F;
+
+}
+
+.modal_actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 40px;
+}
+
+.modal_btn {
+  background: none;
+  border: none;
+}
+
+.modal_btn-cancel {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #CF1B1B;
+}
+
+.modal_btn-send {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #6750A4;
+}
+
+/* image comment under attached image */
+.image-comment {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #222;
 }
