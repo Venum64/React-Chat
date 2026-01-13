@@ -1,5 +1,5 @@
 import React from 'react'
-import chatBg from '../assets/img/Bg.png'
+import chatBg from '../assets/img/bg.png'
 import chatMan from '../assets/img/man.png'
 import chatMan2 from '../assets/img/man2.png'
 import photo from '../assets/img/photo.svg'
