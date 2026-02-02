@@ -110,7 +110,7 @@ const App = () => {
   }, [messagesById, listEls])
 
   return (
-    <div style={{ display: 'flex', gap: 16, padding: 16, minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ display: 'flex', gap: 16, padding: 16, minHeight: '100vh', justifyContent: 'center', alignItems: 'center' }} className='chat'>
       {users.map(user => (
         <div key={user.id} style={{ width: 400 }}>
           <Chat
